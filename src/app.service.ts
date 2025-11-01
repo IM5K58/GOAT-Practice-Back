@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Difficulty, LeaderboardEntry, RecordRequest } from './dto';
 import { randomUUID } from 'node:crypto';
 
@@ -53,10 +53,13 @@ export class AppService {
       const retryAfterSec = Math.ceil(
         (this.RATE_LIMIT_MS - (now - lastTime)) / 1000,
       );
-      throw new BadRequestException({
-        error: 'TOO_MANY_REQUESTS',
-        retryAfterSec,
-      });
+      throw new HttpException(
+        {
+          error: 'TOO_MANY_REQUESTS',
+          retryAfterSec,
+        },
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
     }
 
     // 새 레코드 생성

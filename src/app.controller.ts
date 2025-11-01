@@ -62,7 +62,7 @@ export class AppController {
     try {
       return this.appService.createRecord(body, clientIp);
     } catch (error) {
-      // TooManyRequestsException은 이미 적절한 형태로 throw됨
+      // HttpException (429)은 이미 적절한 형태로 throw됨
       throw error;
     }
   }
